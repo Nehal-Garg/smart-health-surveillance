@@ -1,103 +1,82 @@
-🩺 Smart Health Surveillance System
-- Smart Health Surveillance is an end-to-end machine learning–powered public health monitoring system designed to act as an early warning mechanism for disease outbreaks by analyzing critical water quality parameters.
-- The system integrates machine learning, backend APIs, and an interactive dashboard to support proactive and data-driven public health decisions.
+# Smart Health Surveillance
 
-  🔍 Problem Statement
-Water contamination is a major contributor to disease outbreaks. Traditional monitoring systems are often reactive and delayed.
-This project aims to:
-- Predict potential disease risk before outbreaks occur
-- Analyze water quality data using ML models
-- Provide actionable insights through a user-friendly interface
+A machine learning system that predicts disease outbreak risk based on water quality data. It consists of a trained Random Forest model, a Flask REST API backend, and a Streamlit dashboard for real-time predictions.
 
-  🚀 Solution Overview
-The system predicts health risk levels by processing key water quality indicators such as:
+## Project Structure
+
+```
+├── backend/
+│   └── app.py          # Flask API server
+├── dashboard/
+│   └── dashboard.py    # Streamlit frontend
+├── ml/
+│   ├── train_model.py  # Model training script
+│   ├── model.joblib    # Trained model (generated)
+│   └── reports.csv     # Training dataset
+└── requirements.txt
+```
+
+## How It Works
+
+The model takes three water quality inputs and predicts whether there is a disease outbreak risk:
+
 - Turbidity
 - pH level
-- Bacterial concentration
-A trained supervised learning model evaluates risk severity and presents results through an interactive dashboard.
+- Bacteria count
 
-✨ Key Features
-- ML-based disease risk prediction
-- Interactive dashboard for real-time parameter input
-- Backend API for model inference
-- Modular and scalable system design
-- Clear visual feedback for decision support
+## Setup
 
-  🧠 Machine Learning Pipeline
-- Data preprocessing and feature engineering
-- Supervised learning model for health risk classification
-- Model serialization and backend integration
-- Real-time inference via API
+1. Install dependencies:
 
-  🛠 Tech Stack
-Programming & Frameworks
-- Python – core application logic
-- Flask – backend API and ML inference
-- Streamlit – interactive dashboard and visualization
+```bash
+pip install -r requirements.txt
+```
 
-Machine Learning
-- Data preprocessing and feature engineering
-- Supervised ML model for risk prediction
+2. Train the model (skip if `ml/model.joblib` already exists):
 
-Version Control
-- Git & GitHub
+```bash
+python ml/train_model.py
+```
 
-🏗 System Architecture
-User Input
-   ↓
-Streamlit Dashboard
-   ↓
-Flask REST API
-   ↓
-Machine Learning Model
-   ↓
-Health Risk Prediction
+3. Start the Flask backend:
 
-📁 Project Structure
-Smart-Health-Surveillance/
-│
-├── app.py                 # Flask backend API
-├── dashboard.py           # Streamlit dashboard
-│
-├── model/
-│   ├── trained_model.pkl
-│   └── preprocessing.py
-│
-├── data/
-│   └── dataset.csv
-│
-├── requirements.txt
-├── README.md
-└── screenshots/
+```bash
+python backend/app.py
+```
 
-▶️ How to Run the Project
-1.Clone the repository
-   git clone https://github.com/your-username/smart-health-surveillance.git
-   cd smart-health-surveillance
-2.Install dependencies
-   pip install -r requirements.txt
-3.Start the backend API
-   python app.py
-4.Launch the dashboard
-   streamlit run dashboard.py
+4. In a separate terminal, launch the dashboard:
 
+```bash
+streamlit run dashboard/dashboard.py
+```
 
-📊 Outputs
-- Real-time water quality parameter input
-- Predicted disease risk level
-- Visual indicators for easy interpretation
-- Screenshots of the dashboard and prediction results are available in the screenshots/ directory.
+Then open the Streamlit URL shown in your terminal (usually `http://localhost:8501`).
 
-🧩 Skills Demonstrated
-- End-to-end machine learning pipeline development
-- Data preprocessing and feature engineering
-- Model deployment and API integration
-- Full-stack ML application development
-- Solving real-world problems using AI
+## API
 
-  🔮 Future Enhancements
-- Integration with IoT-based water sensors
-- Real-time data ingestion pipelines
-- Cloud deployment and monitoring
-- Model optimization and performance tracking
-- Advanced alerting and visualization mechanisms
+`POST /predict`
+
+Request body:
+```json
+{
+  "turbidity": 3.5,
+  "ph": 7.2,
+  "bacteria_count": 150
+}
+```
+
+Response:
+```json
+{
+  "outbreak_risk": 0
+}
+```
+
+`outbreak_risk` is `1` (high risk) or `0` (safe).
+
+## Tech Stack
+
+- Python, scikit-learn (Random Forest)
+- Flask + Flask-CORS
+- Streamlit
+- pandas, joblib
